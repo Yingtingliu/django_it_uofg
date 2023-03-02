@@ -2,6 +2,9 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
+# P.97 for slugify
+from django.template.defaultfilters import slugify
+
 
 # Create your models here.
 
@@ -9,6 +12,19 @@ class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
     views = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
+    # add for chapter 6 p.97
+    # slug = models.SlugField()
+    # edit it ch6 p.99
+    # slug = models.SlugField(blank=True) # p.100 replace it
+    # ch6 p.100 we can ensure that the slug field is also unique 
+    # by adding the constraint to the slug field. 
+    slug = models.SlugField(unique=True)
+
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
+
     # typo within the admin interface (Categorys, not Categories) can be fixed by adding a nested Meta class 
     # into your model definitions with the verbose_name_plural attribute.
     class Meta:
