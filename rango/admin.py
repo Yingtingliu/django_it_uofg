@@ -7,10 +7,21 @@ from django.utils import timezone
 class PageAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'url')
 
-admin.site.register(Category)
+# admin.site.register(Category)
 admin.site.register(Page, PageAdmin)
 
+"""
+p.99 add this to solve blank slug, refer to rango/model.py 
+code: slug = models.SlugField(blank=True)
+customise the admin interface so that it automatically pre-populates the slug
+field as you type in the category name
+"""
 
+# Add in this class to customise the Admin Interface
+class CategoryAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug':('name',)}
+# Update the registration to include this customised interface
+admin.site.register(Category, CategoryAdmin)
 
 # https://docs.djangoproject.com/en/2.1/ref/contrib/admin/
 
