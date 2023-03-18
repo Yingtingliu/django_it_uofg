@@ -6,11 +6,12 @@
   <body>
     <h1>Add a Category</h1>
     <div>
-      <form id="category_form" method="post" action="/rango/add_category/">
+      <form id="category_form" method="post" action="{% url 'add_category' %}">
         <!-- This is a
         Cross-Site Request Forgery (CSRF) token, which helps to protect and secure the
         HTTP POST request that is initiated on the subsequent submission of a form. -->
         {% csrf_token %} 
+        {{ form.as_p }}
 
         <!-- The need for hidden as well as visible form fields are necessitated by the
         fact that HTTP is a stateless protocol. -->
@@ -29,4 +30,4 @@
       </form>
     </div>
   </body>
-</html>
+</html> 
