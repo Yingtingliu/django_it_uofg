@@ -1,11 +1,13 @@
-<!DOCTYPE html> {% load static %}
-<!-- New line -->
-<html>
-  <head>
-    <title>Rango</title>
-  </head>
+{% extends 'base.html' %}
+{% load static %}
 
-  <body>
+{% block title_block %}
+		HomePage
+{% endblock %}
+
+
+{% block body_block %}
+
     <h1>Rango says...</h1>
 
     <div>
@@ -30,13 +32,10 @@
       {% endif %} 
     </div>
 
-    <div>
-      <!-- <a href="/rango/about/">About</a><br /> -->
+    <div>      
       <a href="{% url 'rango:about' %}">About</a><br />
-      <a href="/rango/add_category/">Add a New Category</a><br />      
-      <img src="{% static 'images/cat.jpg' %}" alt="Picture of Rango" />
-      
-      <!-- New line -->
+      <a href="{% url 'rango:add_category' %}">Add a New Category</a><br />      
+      <img src="{% static 'images/cat.jpg' %}" alt="Picture of Rango" />        
     </div>
-  </body>
-</html>
+{% endblock %}
+
