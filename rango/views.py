@@ -233,3 +233,13 @@ def user_logout(request):
     logout(request)
     # Take the user back to the homepage.
     return redirect(reverse('rango:index'))
+
+# self explanatory
+# cookies
+@login_required
+def test_cookies(request):
+    username = request.user.username
+    response = render(request, 'rango/test_cookies.html', {'username': username})
+    response.set_cookie('username', username)
+    # response.set_cookie('test_cookie', 'this is a test cookie')
+    return response
