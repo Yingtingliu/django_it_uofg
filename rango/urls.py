@@ -27,6 +27,9 @@ urlpatterns = [
         views.show_category, name='show_category'),
     path('add_category/', views.add_category, name='add_category'),
 
+    # chaper 7 excerise
+    path('<int:question_id>/vote/', views.vote, name='vote'),
+
 
 ] 
 

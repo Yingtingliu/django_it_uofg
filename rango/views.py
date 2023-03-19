@@ -7,6 +7,10 @@ from rango.models import Page
 from rango.forms import CategoryForm
 from django.shortcuts import redirect
 from django.template.loader import get_template, select_template
+# ch7 excercise
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from .models import Choice, Question
 
 def index(request):   
 
@@ -63,26 +67,6 @@ def show_category(request, category_name_slug):
         # Go render the response and return it to the client.
     return render(request, 'rango/category.html', context=context_dict)
 
-# ch7 forms: p.116
-# def add_category(request):
-#     form = CategoryForm()
-#     # A HTTP POST?
-#     if request.method == 'POST':
-#         form = CategoryForm(request.POST)
-#         # Have we been provided with a valid form?
-#     if form.is_valid():
-#         # Save the new category to the database.
-#         form.save(commit=True)
-#         # Now that the category is saved, we could confirm this.
-#         # For now, just redirect the user back to the index view.
-#         return redirect('/rango/')
-#     else:
-#     # The supplied form contained errors 
-#     # just print them to the terminal.
-#         print(form.errors)
-#     # Will handle the bad form, new form, or no form supplied cases.
-#     # Render the form with error messages (if any).
-#     return render(request, 'rango/rango/add_category.html', {'form': form})
 
 def add_category(request):
     form = CategoryForm()
@@ -94,3 +78,28 @@ def add_category(request):
             return redirect('/rango/')
     
     return render(request, 'rango/add_category.html', {'form': form})
+
+
+
+# ch7 excercise ----
+def vote(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        selected_choice = question.choice_set.get(pk=request.POST['choice'])
+    except (KeyError, Choice.DoesNotExist):
+        # Redisplay the question voting form.
+        return render(request, 'polls/detail.html', {
+            'question': question,
+            'error_message': "You didn't select a choice.",
+        })
+    else:
+        selected_choice.votes += 1
+        selected_choice.save()
+        # Always return an HttpResponseRedirect after successfully dealing
+        # with POST data. This prevents data from being posted twice if a
+        # user hits the Back button.
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+def results(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/results.html', {'question': question})
