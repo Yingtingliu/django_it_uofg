@@ -33,7 +33,7 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('restricted/', views.restricted, name='restricted'),
     # self explanatory
-    path('test_cookies/', views.test_cookies, name='test_cookies'),
+    # path('test_cookies/', views.test_cookies, name='test_cookies'),
 
 ] 
 

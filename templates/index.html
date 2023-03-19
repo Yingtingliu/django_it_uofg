@@ -23,6 +23,7 @@
     </div>
 
     <div>
+
       {% if categories %}
       <ul>
         {% for category in categories %}
@@ -40,9 +41,7 @@
     </div>
 
     <div>      
-      <a href="{% url 'rango:test_cookies' %}">Test Cookies</a><br />
-      <a href="{% url 'rango:register' %}.">Register</a><br />
-     
+      <a href="{% url 'rango:register' %}.">Register</a><br />     
       <img src="{% static 'images/cat.jpg' %}" alt="Picture of Rango" />        
     </div>
 {% endblock %}
