@@ -8,12 +8,10 @@ from rango.forms import CategoryForm
 from django.shortcuts import redirect
 from django.template.loader import get_template, select_template
 # ch7 excercise
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from .models import Choice, Question
+from rango.forms import PageForm
 
-def index(request):   
 
+def index(request):
     """
     Construct a dictionary to pass to the template engine as its context.
     Note the key boldmessage matches to {{ boldmessage }} in the template!
@@ -29,16 +27,19 @@ def index(request):
     Place the list in our context_dict dictionary (with our boldmessage!)
     that will be passed to the template engine.
     """
-    
-    category_list = Category.objects.order_by('-likes')[:10] # this shows the top 10 categories
+
+    category_list = Category.objects.order_by(
+        '-likes')[:10]  # this shows the top 10 categories
     context_dict = {}
     context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
     context_dict['categories'] = category_list
 
     return render(request, 'index.html', context=context_dict)
 
-def about(request):    
+
+def about(request):
     return render(request, 'about.html')
+
 
 def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
@@ -76,30 +77,30 @@ def add_category(request):
         if form.is_valid():
             form.save(commit=True)
             return redirect('/rango/')
-    
+
     return render(request, 'rango/add_category.html', {'form': form})
 
 
-
-# ch7 excercise ----
-def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
+def add_page(request, category_name_slug):
     try:
-        selected_choice = question.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'polls/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        category = Category.objects.get(slug=category_name_slug)
+    except Category.DoesNotExist:
+        category = None
 
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'question': question})
+    form = PageForm()
+    if request.method == 'POST':
+        form = PageForm(request.POST)
+        if form.is_valid():
+            if category:
+                page = form.save(commit=False)
+                page.category = category
+                page.views = 0
+                page.save()
+                # probably better to use a redirect here.
+            return redirect(reverse('rango:show_category', kwargs={'category_name_slug': category_name_slug}))
+        else:
+            print(form.errors)
+
+    context_dict = {'form':form, 'category': category}
+
+    return render(request, 'rango/add_page.html', context_dict)
