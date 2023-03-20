@@ -27,6 +27,7 @@ def read_bing_key():
 
 def run_query(search_terms):
 	
+	
 	bing_api_key = read_bing_key()
 	if not bing_api_key:
 		raise KeyError('Bing Key Not Found')	
