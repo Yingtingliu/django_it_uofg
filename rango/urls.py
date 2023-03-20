@@ -28,9 +28,9 @@ urlpatterns = [
     path('add_category/', views.add_category, name='add_category'),
     # chaper 7 excerise   
     path('category/<slug:category_name_slug>/add_page/', views.add_page, name='add_page'),
-    path('register/', views.register, name='register'),
-    path('login/', views.user_login, name='login'),
-    path('logout/', views.user_logout, name='logout'),
+    # path('register/', views.register, name='register'),
+    # path('login/', views.user_login, name='login'),
+    # path('logout/', views.user_logout, name='logout'),
     path('restricted/', views.restricted, name='restricted'),
     # self explanatory
     # path('test_cookies/', views.test_cookies, name='test_cookies'),
