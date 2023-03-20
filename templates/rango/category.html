@@ -10,6 +10,8 @@
 
  
 {% block body_block %}  
+
+<div class="jumbotron p-4">
     
   {% if category %}
     <h1>{{ category.name }}</h1>
@@ -32,6 +34,7 @@
   {% else %}
       The specified category does not exist.
   {% endif %}
-    
+  
+</div>    
 {% endblock %}  
 

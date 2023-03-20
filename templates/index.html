@@ -6,42 +6,83 @@
 {% endblock %}
 
 
-{% block body_block %}
+{% block body_block %}    
 
-    <h1>Rango says...</h1>
+<div class="jumbotron p-5">
+  <div class="container">
+        <h1 class="jumbotron-heading">Rango says...</h1>
+        <div>
+          <h2 class="h2">
+            {% if user.is_authenticated %}
+              howdy {{ user.username }}!
+            {% else %}
+              hey there partner!
+            {% endif %}
+          </h2>
+          <strong>{{ boldmessage }}</strong>
+        </div>
+  </div>
+ </div><!--end jumbotron p-5-->
 
-    <div>
-      <!--Show name if login-->
-      {% if user.is_authenticated %}
-        howdy {{ user.username }}!
-      {% else %}
-        hey there partner!
-      {% endif %}
-
-      <strong>{{ boldmessage }}</strong><br />
-
-    </div>
-
-    <div>
-
-      {% if categories %}
-      <ul>
-        {% for category in categories %}
-        <li>
-            <!-- The following line is changed to add an HTML hyperlink -->
-            <a href="/rango/category/{{ category.slug }}/">{{ category.name }}</a>
-            </li>
+  
+	
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-6">
+          <div class="card-body">
+            <h4>Most Liked Categories</h4>
+            <p>
+                  {% if categories %}
+                    <ul class="list-group">
+                        {% for category in categories %}
+                            <li class="list-group-item">
+                              <a href="{% url 'rango:show_category' category.slug %}">
+                                {{ category.name }}</a>
+                                
+                              <span class="badge badge-pill badge-primary">{{category.likes}}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <strong>There are no categories present.</strong>
+                {% endif %}
             
-        <li>{{ category.name }}</li>
-        <!-- {% endfor %} -->
-      </ul>
-      {% else %}
-      <strong>There are no categories present.</strong>
-      {% endif %} 
-    </div>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mb-6">
+          <div class="card-body">
+            <h4>Most Viewed Pages</h4>
+            <p>
+            {% if pages %}
+            <ul class="list-group">
+            {% for page in pages %}
+            <li class="list-group-item">
+                <a href="{{ page.url }}">{{ page.title }}</a>
+                <span class="badge badge-pill badge-primary">{{page.views}}</span>
+            </li>
+            {% endfor %}
+            </ul>
+            {% else %}
+            <strong>There are no categories present.</strong>
+          {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>	
 
-    <div>
-      <img src="{% static 'images/cat.jpg' %}" alt="Picture of Rango" />        
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <img src="{% static 'images/cat.jpg' %}" alt="Picture of Rango" />    
+        </div>  
+      </div>  
     </div>
+  </div>
+</div>
 {% endblock %}
 
