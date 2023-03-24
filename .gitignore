@@ -4,3 +4,4 @@ __pycache__/
 .vscode/
 bing.key
 tango_with_django_project/secrets.py
+
